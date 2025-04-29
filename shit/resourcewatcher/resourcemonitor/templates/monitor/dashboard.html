@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TCP Monitor</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; }
+        table { margin: 2em auto; border-collapse: collapse; }
+        th, td { padding: 10px 20px; border: 1px solid #ccc; }
+        th { background: #eee; }
+    </style>
+</head>
+<body>
+    <h1>🔍 TCP Port Monitor</h1>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Host</th>
+            <th>Port</th>
+            <th>Status</th>
+        </tr>
+        {% for result in results %}
+        <tr>
+            <td>{{ result.name }}</td>
+            <td>{{ result.host }}</td>
+            <td>{{ result.port }}</td>
+            <td>{{ result.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
