@@ -104,7 +104,35 @@ resourcemonitor/
 ├── tcp_monitor.py
 └── ...
 ```
+Got it! You want me to add a **Jira line item** to the **README** right after the email feature description. Here's how the updated future features section will look in your `README.md`:
 
+---
+
+### 🚀 Future Features:
+
+1. **Email Notification System**:
+   - A generic class to send an email notification when an error occurs.
+   - Support for multiple email servers, including:
+     - User/pass login configuration.
+     - Integration with Microsoft Flow (using the URL flow).
+   - Option to dynamically update a list of users without restarting the server. This would allow users to be added or removed from the notification list without any downtime.
+
+2. **Jira Ticket**:  
+   - [**Email Notification System & Dynamic User List for Error Handling**](https://jira.yourcompany.com/browse/TICKET_ID)
+   - A Jira ticket has been created for tracking the development of the email notification system and dynamic user list feature. Check the ticket for updates and progress.
+
+3. **Error Handling Enhancement**:
+   - Ability to trigger the email notifications in case of system failures, error logs, or important events.
+   - Ensure proper error logging and detailed alerts, including:
+     - Error type and message.
+     - Host or service related to the error.
+
+4. **Dynamic User List**:
+   - Ability to manage a list of users for notifications through a simple file-based mechanism (like a `.txt` or `.json` file).
+   - Users should be able to add/remove entries to the list, and the system should update without requiring a server restart.
+   - Ensure proper validation of email addresses and smooth integration with the email notification system.
+
+---
 ---
 
 ## ⚖️ License

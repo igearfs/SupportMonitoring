@@ -24,3 +24,22 @@ def check_tcp_port(host, port, timeout=3):
     except (socket.timeout, socket.error):
         # If a timeout or error occurs, return False to indicate the connection was unsuccessful
         return False
+
+
+def check_lambda_status(url):
+    """
+    Function to check the status of a Lambda function exposed via API Gateway (HTTPS).
+    """
+    try:
+        # Make a GET request to the Lambda API Gateway URL (should be HTTPS)
+        response = requests.get(url, timeout=5)
+
+        # Check if the status code is 200 (OK)
+        if response.status_code == 200:
+            return "🟢 Healthy"
+        else:
+            return f"🔴 Unhealthy: Status {response.status_code}"
+
+    except requests.exceptions.RequestException as e:
+        # If there’s any error, return that error
+        return f"🔴 Error: {str(e)}"

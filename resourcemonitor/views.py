@@ -9,8 +9,9 @@ from django.http import JsonResponse
 from .tcp_monitor import check_tcp_port  # Import the TCP monitoring function
 from .api_monitor import check_http_response  # Import the HTTP response checker
 from .sftp_monitor import check_sftp_file_activity, get_file_count_history  # Import SFTP-related functions
+from .lambda_monitor import check_lambda_status  # Import LambdaMonitor class from lambda_monitor.py
 
-# Global list of monitoring targets (TCP, API, SFTP) with their respective details
+# Global list of monitoring targets (TCP, API, SFTP, Lambda) with their respective details
 # BELOW ARE PUBLIC SFTP'S WITH PUBLIC INFO FOR USER/PASS So don't give me grief about user/pass being in here.
 # SEE: https://www.sftp.net/public-online-sftp-servers
 # ALSO that last SFTP is for TCP Ping because there is no login or files to count. It's just a ping check. So it's really TCP at that point.
@@ -22,7 +23,11 @@ targets = [
     {"name": "GitHub API", "host": "api.github.com", "port": 443, "url": "https://api.github.com/", "type": "API"},
     {"name": "FakeAPI Test", "host": "example.com", "port": 443, "url": "https://example.com/", "type": "API"},
     {"name": "FTP - test.rebex.net", "host": "test.rebex.net", "port": 22, "username": "demo", "password": "password", "remote_dir": "/pub/example/", "type": "SFTP"},
-    {"name": "FTP - itcsubmit.wustl.edu", "host": "itcsubmit.wustl.edu", "port": 22, "type": "TCP"}
+    {"name": "FTP - itcsubmit.wustl.edu", "host": "itcsubmit.wustl.edu", "port": 22, "type": "TCP"},
+    {"name": "Public Lambda TEST", "host": "https://jsonplaceholder.typicode.com/posts", "port": 443,
+        "url": "https://jsonplaceholder.typicode.com/posts",
+        "type": "LAMBDA"
+    }
 ]
 
 def dashboard(request):
@@ -33,8 +38,9 @@ def dashboard(request):
     tcp_results = []  # List to hold TCP results
     sftp_results = []  # List to hold SFTP results
     api_results = []  # List to hold API results
+    lambda_results = []  # List to hold Lambda results
 
-    # Loop through all targets to check their status based on the type (TCP, API, SFTP)
+    # Loop through all targets to check their status based on the type (TCP, API, SFTP, Lambda)
     for target in targets:
         if target["type"] == "SFTP":
             # Perform SFTP monitoring for the target and append result to sftp_results
@@ -64,6 +70,16 @@ def dashboard(request):
                 "http": http_status
             })
 
+        elif target["type"] == "LAMBDA":
+            # Use LambdaMonitor to check Lambda status via its API Gateway URL
+            status, _ = check_lambda_status(target["url"])
+            lambda_results.append({
+                "name": target["name"],
+                "host": target["host"],
+                "port": target["port"],
+                "status": status
+            })
+
         else:  # Handle regular TCP monitoring
             status = "🟢" if check_tcp_port(target["host"], target["port"]) else "🔴"
             tcp_results.append({
@@ -81,6 +97,7 @@ def dashboard(request):
         "tcp_results": tcp_results,
         "sftp_results": sftp_results,
         "api_results": api_results,
+        "lambda_results": lambda_results,  # Include Lambda results in the context
         "file_count_history": file_count_history  # Include the file count history in the context
     }
 
@@ -93,6 +110,7 @@ def refresh_data(request):
     tcp_results = []  # List to hold refreshed TCP results
     sftp_results = []  # List to hold refreshed SFTP results
     api_results = []  # List to hold refreshed API results
+    lambda_results = []  # List to hold refreshed Lambda results
 
     # Loop through all targets and perform the same checks as in the dashboard view
     for target in targets:
@@ -124,6 +142,18 @@ def refresh_data(request):
                 "http": http_status
             })
 
+        elif target["type"] == "LAMBDA":
+            # Use LambdaMonitor to check Lambda status via its API Gateway URL
+            status, _ = check_lambda_status(target["url"])
+            http_status = check_http_response(target["url"])
+            lambda_results.append({
+                "name": target["name"],
+                "host": target["host"],
+                "port": target["port"],
+                "lambda": status,
+                "http": http_status
+            })
+
         else:  # Handle regular TCP monitoring
             status = "🟢" if check_tcp_port(target["host"], target["port"]) else "🔴"
             tcp_results.append({
@@ -141,6 +171,7 @@ def refresh_data(request):
         "tcp_results": tcp_results,
         "api_results": api_results,
         "sftp_results": sftp_results,
+        "lambda_results": lambda_results,  # Include Lambda results in the response
         "file_count_history": file_count_history  # Include the file count history in the response
     })
 

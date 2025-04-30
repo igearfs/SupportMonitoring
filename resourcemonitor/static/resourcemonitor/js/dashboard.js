@@ -4,45 +4,52 @@ let isGraphRequestInProgress = false;  // Flag for graph data
 // Ensure the DOM is loaded before attaching event listeners
 document.addEventListener('DOMContentLoaded', function() {
 
-    // Function to update data (tables) from the server
     function updateData() {
-        if (isRequestInProgress) return;
-        isRequestInProgress = true;
-        document.getElementById('spinner').style.display = 'block';
+    if (isRequestInProgress) return;
+    isRequestInProgress = true;
+    document.getElementById('spinner').style.display = 'block';
 
-        fetch("/refresh/")
-            .then(response => response.json())
-            .then(data => {
-                let tcpHTML = '<tr><th>Name</th><th>Host</th><th>Port</th><th>Status</th></tr>';
-                data.tcp_results.forEach(item => {
-                    tcpHTML += `<tr><td>${item.name}</td><td>${item.host}</td><td>${item.port}</td><td>${item.status}</td></tr>`;
-                });
-                document.getElementById('tcp-table').innerHTML = tcpHTML;
-
-                let apiHTML = '<tr><th>Name</th><th>Host</th><th>Port</th><th>TCP Status</th><th>HTTP Status</th></tr>';
-                data.api_results.forEach(item => {
-                    apiHTML += `<tr><td>${item.name}</td><td>${item.host}</td><td>${item.port}</td><td>${item.tcp}</td><td>${item.http}</td></tr>`;
-                });
-                document.getElementById('api-table').innerHTML = apiHTML;
-
-                let sftpHTML = '<tr><th>Name</th><th>Host</th><th>File Count</th><th>Status</th></tr>';
-                data.sftp_results.forEach(item => {
-                    sftpHTML += `<tr><td>${item.name}</td><td>${item.host}</td><td>${item.file_count}</td><td>${item.status}</td></tr>`;
-                });
-                document.getElementById('sftp-table').innerHTML = sftpHTML;
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            })
-            .finally(() => {
-                isRequestInProgress = false;
-                document.getElementById('spinner').style.display = 'none';
+    fetch("/refresh/")
+        .then(response => response.json())
+        .then(data => {
+            let tcpHTML = '<tr><th>Name</th><th>Host</th><th>Port</th><th>Status</th></tr>';
+            data.tcp_results.forEach(item => {
+                tcpHTML += `<tr><td>${item.name}</td><td>${item.host}</td><td>${item.port}</td><td>${item.status}</td></tr>`;
             });
+            document.getElementById('tcp-table').innerHTML = tcpHTML;
+
+            let apiHTML = '<tr><th>Name</th><th>Host</th><th>Port</th><th>TCP Status</th><th>HTTP Status</th></tr>';
+            data.api_results.forEach(item => {
+                apiHTML += `<tr><td>${item.name}</td><td>${item.host}</td><td>${item.port}</td><td>${item.tcp}</td><td>${item.http}</td></tr>`;
+            });
+            document.getElementById('api-table').innerHTML = apiHTML;
+
+            let sftpHTML = '<tr><th>Name</th><th>Host</th><th>File Count</th><th>Status</th></tr>';
+            data.sftp_results.forEach(item => {
+                sftpHTML += `<tr><td>${item.name}</td><td>${item.host}</td><td>${item.file_count}</td><td>${item.status}</td></tr>`;
+            });
+            document.getElementById('sftp-table').innerHTML = sftpHTML;
+
+            // 👇 Lambda section: add this
+            let lambdaHTML = '<tr><th>Name</th><th>Host</th><th>Port</th><th>Lambda Status</th><th>HTTP Status</th></tr>';
+            data.lambda_results.forEach(item => {
+                lambdaHTML += `<tr><td>${item.name}</td><td>${item.host}</td><td>${item.port}</td><td>${item.lambda}</td><td>${item.http}</td></tr>`;
+            });
+            document.getElementById('lambda-table').innerHTML = lambdaHTML;
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        })
+        .finally(() => {
+            isRequestInProgress = false;
+            document.getElementById('spinner').style.display = 'none';
+        });
     }
+
 
     // Initial load of data
     updateData();
-    setInterval(updateData, 10000);  // Update every 10 seconds for tables
+    setInterval(updateData, 20000);  // Update every 10 seconds for tables
 
     // Function to update the graph data (file count)
     function updateGraph(host) {
@@ -105,6 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+
     // Auto-refresh graph every 10 seconds
     setInterval(() => {
         const host = sftpHostSelect.value;
@@ -113,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             Plotly.purge('file-count-chart');  // Clear the graph if no host is selected
         }
-    }, 10000);  // 10 seconds for graph updates
+    }, 20000);  // 10 seconds for graph updates
 
     // On page load, ensure the dropdown is reset to the default value
     sftpHostSelect.value = ""; // Make sure the dropdown is at "-- Choose a Host --" on page load

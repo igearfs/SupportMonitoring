@@ -4,22 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Resource Watcher Dashboard</title>
-    <!-- Link to the external CSS file for styling the dashboard -->
     <link rel="stylesheet" href="{% static 'resourcemonitor/css/dashboard.css' %}">
-    <!-- Link to the external JavaScript file for handling the dashboard functionality -->
     <script src="{% static 'resourcemonitor/js/dashboard.js' %}"></script>
-    <!-- Link to Plotly.js library for generating the charts -->
     <script src="{% static 'resourcemonitor/js/plotly-latest.min.js' %}"></script>
 </head>
 <body>
 
-<!-- Main Heading of the Dashboard -->
 <h1>🌐 Resource Watcher Dashboard</h1>
 
 <!-- TCP Monitors Section -->
 <div class="section">
     <h2>🔌 TCP Monitors</h2>
-    <!-- Table displaying TCP monitor data -->
     <table id="tcp-table">
         <tr>
             <th>Name</th>
@@ -28,7 +23,6 @@
             <th>Status</th>
         </tr>
         {% for item in tcp_results %}
-        <!-- Loop through the TCP data to populate rows dynamically -->
         <tr>
             <td>{{ item.name }}</td>
             <td>{{ item.host }}</td>
@@ -39,10 +33,32 @@
     </table>
 </div>
 
+<!-- Lambda Monitors Section -->
+<div class="section">
+    <h2>🧠 Lambda Monitors</h2>
+    <table id="lambda-table">
+        <tr>
+            <th>Name</th>
+            <th>Host</th>
+            <th>Port</th>
+            <th>Lambda Status</th>
+            <th>Response Code</th>
+        </tr>
+        {% for item in lambda_results %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.host }}</td>
+            <td>{{ item.port }}</td>
+            <td>{{ item.lambda }}</td>
+            <td>{{ item.response_code }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
 <!-- API Monitors Section -->
 <div class="section">
     <h2>🌐 API Monitors</h2>
-    <!-- Table displaying API monitor data -->
     <table id="api-table">
         <tr>
             <th>Name</th>
@@ -52,12 +68,10 @@
             <th>HTTP Status</th>
         </tr>
         {% for item in api_results %}
-        <!-- Loop through the API data to populate rows dynamically -->
         <tr>
             <td>{{ item.name }}</td>
             <td>{{ item.host }}</td>
             <td>{{ item.port }}</td>
-            <td>{{ item.tcp }}</td>
             <td>{{ item.http }}</td>
         </tr>
         {% endfor %}
@@ -67,7 +81,6 @@
 <!-- SFTP Monitors Section -->
 <div class="section">
     <h2>📂 SFTP Monitors</h2>
-    <!-- Table displaying SFTP monitor data -->
     <table id="sftp-table">
         <tr>
             <th>Name</th>
@@ -76,7 +89,6 @@
             <th>Status</th>
         </tr>
         {% for item in sftp_results %}
-        <!-- Loop through the SFTP data to populate rows dynamically -->
         <tr>
             <td>{{ item.name }}</td>
             <td>{{ item.host }}</td>
@@ -87,26 +99,20 @@
     </table>
 </div>
 
-<!-- Plotly Chart Section (Performance Graph) -->
+<!-- Plotly Chart Section -->
 <div class="section">
     <h2>📈 Performance Graph</h2>
-
-    <!-- Dropdown to select SFTP host for chart generation -->
     <label for="sftp-host-select">Select SFTP Host:</label>
     <select id="sftp-host-select">
-        <!-- Default option for no selection -->
         <option value="">-- Choose a host --</option>
         {% for item in sftp_results %}
-        <!-- Loop through available SFTP hosts and display them as options -->
         <option value="{{ item.host }}">{{ item.name }}</option>
         {% endfor %}
     </select>
 
-    <!-- Div to display the generated Plotly chart -->
     <div id="file-count-chart" style="width:100%; height:400px;"></div>
 </div>
 
-<!-- Loading Spinner (hidden by default) -->
 <div id="spinner" style="display: none;">Loading...</div>
 
 </body>
