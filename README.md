@@ -104,7 +104,6 @@ resourcemonitor/
 ├── tcp_monitor.py
 └── ...
 ```
-Got it! You want me to add a **Jira line item** to the **README** right after the email feature description. Here's how the updated future features section will look in your `README.md`:
 
 ---
 
