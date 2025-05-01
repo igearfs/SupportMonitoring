@@ -14,9 +14,9 @@
 
 ---
 
-Sure! Here's a clean and clear section you can include in your `README.md` for your error alerting system — covering **email alerts**, **Jira ticket creation**, and **SMS notifications**.
-
 ---
+
+## ⚠️ Not yet tested or Wired in.
 
 ## ⚠️ Error Alerting System Overview
 
