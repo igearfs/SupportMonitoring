@@ -28,3 +28,13 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test
+    - name: Check if Django site is up
+      run: |
+        # Start the Django development server in the background
+        nohup python manage.py runserver 0.0.0.0:8000 &
+
+        # Wait for the server to start (may adjust time based on the startup time)
+        sleep 10
+
+        # Check if the site is up with a curl request
+        curl -f http://127.0.0.1:8000/ || exit 1  # This will fail if the site is down
