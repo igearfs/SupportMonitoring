@@ -1,6 +1,6 @@
 ---
 
-## ❤️ Support This Project
+### ❤️ Support This Project
 
 If you find this project useful or want to support continued development:
 
