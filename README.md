@@ -1,3 +1,5 @@
+---
+
 ### ❤️ Support This Project
 
 If you find this project useful or want to support continued development:
@@ -8,7 +10,7 @@ Your support fuels prototypes, uptime tools, and indie infrastructure builds.
 
 ---
 
-# ⚠️ PROTOTYPE — SupportMonitoring System
+# PROTOTYPE — SupportMonitoring System
 
 **SupportMonitoring** is a Django-based observability dashboard for tracking the real-time status of TCP, HTTP, and SFTP services.
 
@@ -18,7 +20,79 @@ This prototype includes a health-check dashboard, Plotly-powered visualizations,
 
 ---
 
+---
+
+## 🏗️ Architecture
+
+**SupportMonitoring** follows a modular, pluggable design with clear separation of concerns between monitoring, alerting, and frontend presentation.
+
+### 🔹 High-Level Overview
+
+```plaintext
++--------------------------+
+|     Frontend (HTML +    |
+|     Plotly Dashboards)  |
++--------------------------+
+             |
+             v
++--------------------------+
+|     Django Views Layer   |
+|   (GET /status + UI)     |
++--------------------------+
+             |
+             v
++--------------------------+
+|   Health Check Engine    |
+|   - TCP Monitor          |
+|   - API Monitor          |
+|   - SFTP Monitor         |
++--------------------------+
+             |
+             v
++--------------------------+
+|   Alerting Utilities     |
+|   (Modular, Configurable)|
++--------------------------+
+     |     |       |
+     v     v       v
+ Email   Jira     SMS
+```
+
+---
+
+### 🧩 Core Components
+
+- **Frontend (Templates + JS + Plotly)**  
+  Interactive UI with real-time dashboards, dropdown filters, and file count graphs.
+
+- **Django Views Layer**  
+  Handles request routing, target definitions, and result aggregation.
+
+- **Health Check Engine**  
+  Performs connectivity and service checks:
+  - **TCP**: Port availability via socket
+  - **API**: Status code validation via HTTP(S)
+  - **SFTP**: Directory/file presence and count via Paramiko
+
+- **Alerting System**  
+  Decoupled modules for:
+  - 📧 Email
+  - 📱 Twilio SMS
+  - 🧾 Jira  
+  All wired through a centralized `send_alert()` utility.
+
+---
+
+### 🔄 Extensibility
+
+- Add new check types by expanding the logic in `views.py` or extracting into modules.
+- Create new alert types by implementing a standard `send_<channel>()` function and registering it in `alerts_utils.py`.
+
+---
+
 ## 🚀 Features
+
+SupportMonitoring provides you with essential tools to ensure the health of your key services. Below are the main features designed to enhance service observability and alerting:
 
 - ✅ Monitor TCP services (port open/closed)
 - 🌐 Check HTTP status codes of APIs
