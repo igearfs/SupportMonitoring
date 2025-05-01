@@ -1,7 +1,14 @@
 
-## 🛠️ SupportMonitoring
+## ⚠️ PROTOTYPE - SupportMonitoring System 🛠️
 
-**SupportMonitoring** is a Django-based dashboard for tracking the status of TCP, API, and SFTP targets in real-time. It includes health checks and a Plotly-powered graph to visualize SFTP file activity.
+**This is an early-stage prototype.**  
+Features, stability, and alerting mechanisms are actively under development and may change at any time.
+
+🚧 Use only in internal production environments — not HTTPS compliant at this stage.
+
+
+**SupportMonitoring** is a Django-based dashboard for tracking the status of TCP, API, and SFTP targets in real-time.
+It includes health checks and a Plotly-powered graph to visualize SFTP file activity.
 
 
 ## 🚀 Features

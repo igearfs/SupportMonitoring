@@ -7,13 +7,13 @@ from email.mime.multipart import MIMEMultipart
 from pathlib import Path
 
 def load_config():
-    config_path = Path(__file__).parent / "config.json"
+    config_path = os.path.join(os.path.dirname(__file__), "config.json")
     if config_path.exists():
         with open(config_path) as f:
             return json.load(f)
     return {}
 
-def send_email(to_email, subject, body, config=None):
+def send_email_alert(to_email, subject, body, config=None):
     config = config or load_config()
     email_cfg = config.get("email", {})
 

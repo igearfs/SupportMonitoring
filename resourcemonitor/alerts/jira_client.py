@@ -1,10 +1,12 @@
+import os
 import json
 import requests
 from requests.auth import HTTPBasicAuth
 
 def load_config():
+    config_path = os.path.join(os.path.dirname(__file__), "config.json")
     try:
-        with open("config.json", "r") as f:
+        with open(config_path, "r") as f:
             return json.load(f)
     except FileNotFoundError:
         print("⚠️ Config file not found. Using hardcoded values.")
@@ -16,6 +18,7 @@ def load_config():
                 "project_key": "YOURPROJECT"
             }
         }
+
 
 def issue_exists(summary, config=None):
     config = config or load_config()
@@ -48,11 +51,15 @@ def issue_exists(summary, config=None):
         return False
 
 def create_jira_issue(summary, description, issue_type="Task", config=None):
-    if issue_exists(summary, config=config):
-        print(f"⚠️ Duplicate detected. Jira ticket with similar summary already exists.")
-        return None
-
+    """
+    Creates a new Jira issue if one doesn't already exist.
+    Returns True if the ticket was created successfully, False if it's a duplicate.
+    """
     config = config or load_config()
+    if issue_exists(summary, config=config):
+        print(f"⚠️ Duplicate Jira ticket detected for: {summary}")
+        return False  # Duplicate, do not send alerts
+
     jira_cfg = config.get("jira", {})
 
     base_url = jira_cfg.get("base_url")
@@ -81,17 +88,10 @@ def create_jira_issue(summary, description, issue_type="Task", config=None):
         if response.status_code == 201:
             key = response.json().get("key")
             print(f"✅ Created Jira issue: {key}")
-            return key
+            return True  # Issue created, proceed with alerts
         else:
             print(f"❌ Failed to create issue: {response.status_code} {response.text}")
-            return None
+            return False  # Failed to create issue
     except Exception as e:
         print(f"❌ Error while creating issue: {e}")
-        return None
-
-# Example usage
-if __name__ == "__main__":
-    create_jira_issue(
-        summary="Database connection failure on Server X",
-        description="Cannot connect to the database on 10.0.0.4. Port 5432 timeout.",
-    )
+        return False  # Error while creating issue
