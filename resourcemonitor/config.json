@@ -1,0 +1,15 @@
+{
+  "email": {
+    "smtp_server": "smtp.example.com",
+    "smtp_port": 587,
+    "username": "your@email.com",
+    "password": "yourpassword",
+    "from_email": "your@email.com"
+  },
+  "jira": {
+    "base_url": "https://your-domain.atlassian.net",
+    "username": "your@email.com",
+    "api_token": "your-api-token",
+    "project_key": "TEST"
+  }
+}
