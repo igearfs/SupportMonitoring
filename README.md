@@ -4,9 +4,12 @@
 
 If you find this project useful or want to support continued development:
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/igearfs)
+<a href="https://ko-fi.com/igearfs">
+    <img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Ko-fi button" width="20%" height="20%">
+</a>
 
 Your support fuels prototypes, uptime tools, and indie infrastructure builds.
+
 
 ---
 
