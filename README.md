@@ -1,24 +1,27 @@
+
 ---
 
 ### ❤️ Support This Project
 
-If you find this project useful or want to support continued development!
+If you find this project useful or want to support continued development:
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/igearfs)
+<a href="https://ko-fi.com/igearfs">
+    <img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Ko-fi button" width="20%" height="20%">
+</a>
 
 Your support fuels prototypes, uptime tools, and indie infrastructure builds.
 
+For more details or questions, visit the [SupportMonitoring Repository](https://github.com/igearfs/SupportMonitoring).
+
 ---
 
-# PROTOTYPE — SupportMonitoring System
+# ⚠️ PROTOTYPE — SupportMonitoring System
 
-**SupportMonitoring** is a Django-based observability dashboard for tracking the real-time status of TCP, HTTP, and SFTP services.
+**SupportMonitoring** is a Django-based observability dashboard for tracking the real-time status of TCP, HTTP, SFTP, and Lambda services.
 
 This prototype includes a health-check dashboard, Plotly-powered visualizations, and an optional alerting system via email, Jira, or Twilio SMS.
 
 > **Use in internal environments only** — see [Known Issues](#known-issues) for current limitations.
-
----
 
 ---
 
@@ -46,6 +49,7 @@ This prototype includes a health-check dashboard, Plotly-powered visualizations,
 |   - TCP Monitor          |
 |   - API Monitor          |
 |   - SFTP Monitor         |
+|   - Lambda Monitor       |  <--- Added Lambda Monitoring
 +--------------------------+
              |
              v
@@ -73,6 +77,7 @@ This prototype includes a health-check dashboard, Plotly-powered visualizations,
   - **TCP**: Port availability via socket
   - **API**: Status code validation via HTTP(S)
   - **SFTP**: Directory/file presence and count via Paramiko
+  - **Lambda**: Invoking AWS Lambda functions and monitoring response time and success/failure status.
 
 - **Alerting System**  
   Decoupled modules for:
@@ -92,11 +97,10 @@ This prototype includes a health-check dashboard, Plotly-powered visualizations,
 
 ## 🚀 Features
 
-SupportMonitoring provides you with essential tools to ensure the health of your key services. Below are the main features designed to enhance service observability and alerting:
-
 - ✅ Monitor TCP services (port open/closed)
 - 🌐 Check HTTP status codes of APIs
 - 📂 Count files on remote SFTP servers
+- 🔁 Monitor Lambda function invocations and status
 - 📊 Visualize file count history using Plotly
 - 🔄 Auto-refresh and dropdown filtering
 - 📢 Optional alerting via:
@@ -155,6 +159,7 @@ targets = [
     {"name": "Google", "host": "google.com", "port": 443, "type": "TCP"},
     {"name": "OpenAI API", "host": "api.openai.com", "port": 443, "url": "https://api.openai.com/v1/", "type": "API"},
     {"name": "Test SFTP", "host": "test.rebex.net", "port": 22, "username": "demo", "password": "password", "remote_dir": "/pub/example/", "type": "SFTP"},
+    {"name": "Lambda Example", "host": "aws-lambda.amazonaws.com", "function_name": "myLambdaFunction", "type": "LAMBDA"},
     ...
 ]
 ```
@@ -266,3 +271,4 @@ MIT License — see [LICENSE](LICENSE).
 © 2024 In-Game Event / Red Flag Syndicate LLC.
 
 ---
+```
